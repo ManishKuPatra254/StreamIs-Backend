@@ -115,3 +115,58 @@ export const getUserById = async (req, res) => {
 
 
 //update
+
+
+export const updateData = async (req, res) => {
+    try {
+        // Assuming id is part of the request parameters
+        const { id, first_name, last_name } = req.body;
+
+        // Create an object with the fields to be updated
+        const updateFields = {
+            first_name,
+            last_name,
+        };
+
+        // Use findByIdAndUpdate to update the document
+        const updatedData = await auth.findByIdAndUpdate(
+            id,
+            updateFields,
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedData) {
+            throw new Error('Data not found');
+        }
+
+        res.send({
+            status: 200,
+            success: true,
+            msg: 'Data updated successfully',
+            result: updatedData
+        });
+    } catch (error) {
+        res.send({ status: 400, success: false, msg: error.message });
+    }
+};
+
+
+
+export const deleteUsers = async (req, res) => {
+    try {
+        const { id } = req.body;
+        console.log(req.body, "req");
+
+        // Use deleteMany to delete multiple users based on their IDs
+        // const result = await auth.deleteMany({ _id: { $in: id } });
+        const result = await auth.deleteMany({ _id: id });
+        console.log(result, "kjhgfdsa")
+        const updatedUsers = await auth.find(); // Fetch the updated list
+
+
+        res.send({ status: 200, success: true, msz: 'Users deleted successfully', data: updatedUsers });
+    } catch (error) {
+        console.error(error);
+        res.send({ status: 400, success: false, msg: error.message });
+    }
+};
