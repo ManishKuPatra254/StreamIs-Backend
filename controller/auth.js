@@ -150,23 +150,29 @@ export const updateData = async (req, res) => {
     }
 };
 
+export const bulkDelete = async (req, res) => {
+    const { ids } = req.body;
+    console.log(ids)
+    const result = await auth.deleteMany({ _id: { $in: ids } })
+    res.send({
+        message: "deleted",
+        result: result
+    })
+}
 
+// export const deleteUsers = async (req, res) => {
+//     try {
+//         const { id } = req.body;
+//         console.log(req.body, "req");
 
-export const deleteUsers = async (req, res) => {
-    try {
-        const { id } = req.body;
-        console.log(req.body, "req");
-
-        // Use deleteMany to delete multiple users based on their IDs
-        // const result = await auth.deleteMany({ _id: { $in: id } });
-        const result = await auth.deleteMany({ _id: id });
-        console.log(result, "kjhgfdsa")
-        const updatedUsers = await auth.find(); // Fetch the updated list
-
-
-        res.send({ status: 200, success: true, msz: 'Users deleted successfully', data: updatedUsers });
-    } catch (error) {
-        console.error(error);
-        res.send({ status: 400, success: false, msg: error.message });
-    }
-};
+//         // Use deleteMany to delete multiple users based on their IDs
+//         // const result = await auth.deleteMany({ _id: { $in: id } });
+//         const result = await auth.deleteMany({ _id: id });
+//         console.log(result, "kjhgfdsa")
+//         const updatedUsers = await auth.find(); // Fetch the updated list
+//         res.send({ status: 200, success: true, msz: 'Users deleted successfully', data: updatedUsers });
+//     } catch (error) {
+//         console.error(error);
+//         res.send({ status: 400, success: false, msg: error.message });
+//     }
+// };
